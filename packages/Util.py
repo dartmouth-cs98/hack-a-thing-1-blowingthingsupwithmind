@@ -20,7 +20,7 @@ def inform(msg, clear=False, end='\n'):
     print('\n{}{}'.format(msg.upper(), end))
 
 class CustomWebSocket(websocket.WebSocket):
-    """Web socket with custom data reception"""
+    """web socket with custom data reception"""
     def recv_frame(self):
         frame = super().recv_frame()
         data = frame.data.decode('utf-8')

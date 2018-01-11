@@ -6,8 +6,8 @@ Date:           01/10/2018
 Project:        CS98 Hack-a-thing 1
 """
 
-from Emotiv import Emotiv
-from Util import *
+from packages.Emotiv import Emotiv
+from packages.Util import *
 import json
 import os
 

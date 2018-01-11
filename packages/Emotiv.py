@@ -6,7 +6,7 @@ Date:           01/10/2018
 Project:        CS98 Hack-a-thing 1
 """
 
-from Util import *
+from packages.Util import *
 import websocket
 import socket
 import ssl
@@ -61,7 +61,7 @@ class Emotiv:
 
             # poll for training status
             if 'MC_Started' in res:
-                inform('training {}...'.format(action.upper()))
+                inform('training {}...'.format(action))
             elif 'MC_Succeeded' in res:
 
                 # accept successful training
@@ -72,7 +72,7 @@ class Emotiv:
                     'action': action,
                     'status': 'accept'
                 })
-                inform('training succeeded!', clear=True)
+                inform('{} training succeeded!'.format(action), clear=True)
                 return True
 
             # catch training errors
