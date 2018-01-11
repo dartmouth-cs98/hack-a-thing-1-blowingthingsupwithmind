@@ -20,14 +20,10 @@ class Emotiv:
     def __init__(self):
         self.trained = False
 
-        # for training session
+        # training session attributes
         self.webSocket = None
         self.authToken = None
         self.sessionId = None
-
-        # for authorization
-        self.clientSecret = 's7DZupwKBGDUy8bgZUb8INqq265yRFSkFqAT1uDuQL6dMwSrmZTZtWMkzDw3MSiJikrZGIbtr3b89vx0wwWVO0N83D4SrkJ0mPQ1yhISxlwFZsikwFZ2cT6IRSmCJ5gB'
-        self.clientId = 'afGFgm19lkKsJhIYzFSE7UZ8TIjhTk3s9Ktf7zS7'
 
     def test(self):
         """test mental commands"""
@@ -45,17 +41,17 @@ class Emotiv:
     def train(self, action):
         """train Emotiv mental command"""
         res = self.makeRequest('training', {
-            "_auth":self.authToken,
-            "detection":"mentalCommand",
-            "session":self.sessionId,
-            "action":"neutral",
-            "status":"start"
+            '_auth': self.authToken,
+            'detection': 'mentalCommand',
+            'session': self.sessionId,
+            'action': action,
+            'status': 'start'
         })
         if 'error' in res:
             print('training failed')
             return False
 
-        # begin neutral training
+        # begin training
         inform('starting up {} training'.format(action), clear=True, end='')
         inform('please wait')
         complete = False
@@ -70,14 +66,16 @@ class Emotiv:
 
                 # accept successful training
                 self.makeRequest('training', {
-                    "_auth":self.authToken,
-                    "detection":"mentalCommand",
-                    "session":self.sessionId,
-                    "action":action,
-                    "status":"accept"
+                    '_auth': self.authToken,
+                    'detection': 'mentalCommand',
+                    'session': self.sessionId,
+                    'action': action,
+                    'status': 'accept'
                 })
                 inform('training succeeded!', clear=True)
                 return True
+
+            # catch training errors
             elif 'MC_Failed' in res:
                 inform('training failed', end='')
                 inform('please try again')
@@ -90,10 +88,10 @@ class Emotiv:
     def subscribe(self):
         """subscribe to Emotiv stream"""
         res = self.makeRequest('subscribe', {
-            "_auth": self.authToken,
-            "streams": [
-                "com",
-                "sys" ]
+            '_auth': self.authToken,
+            'streams': [
+                'com',
+                'sys' ]
         })
         if 'error' in res:
             return False
@@ -102,8 +100,8 @@ class Emotiv:
     def createSession(self):
         """establish Emotiv training session"""
         res = self.makeRequest('createSession', {
-            "_auth": self.authToken,
-            "status": "open"
+            '_auth': self.authToken,
+            'status': 'open'
         })
         if 'error' in res:
             return False
@@ -115,7 +113,9 @@ class Emotiv:
 
     def authorize(self):
         """authenticate Emotiv user"""
-        res = self.makeRequest('authorize')
+        res = self.makeRequest('authorize', {
+            'debit': 1
+        })
         if 'error' in res:
             return False
 
@@ -133,10 +133,10 @@ class Emotiv:
     def makeRequest(self, method, params={}):
         """make request to Emotiv web socket"""
         self.webSocket.send(json.dumps({
-            "jsonrpc": "2.0",
-            "method": method,
-            "params": params,
-            "id": 1
+            'jsonrpc': '2.0',
+            'method': method,
+            'params': params,
+            'id': 1
         }))
         return self.webSocket.recv()
 
