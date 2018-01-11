@@ -1,9 +1,10 @@
-import graphics
+import packages.graphics as graphics
 import time, os, sys
 
 def main():
     win = graphics.GraphWin("My Circle", 300, 300)
     win.setBackground("grey")
+
     radius = 50
 
     rPoint1 = graphics.Point(100,100)

@@ -7,6 +7,7 @@ Project:        CS98 Hack-a-thing 1
 """
 
 from packages.Util import *
+from packages.Graphic import *
 import websocket
 import socket
 import ssl
@@ -16,7 +17,7 @@ import time
 import os
 
 class Emotiv:
-    """Operations for communication with Emotiv Cortex"""
+    """operations for communicating with Emotiv Cortex"""
     def __init__(self):
         self.trained = False
 
@@ -26,14 +27,28 @@ class Emotiv:
         self.sessionId = None
 
     def test(self):
-        """test mental commands"""
+        """visualize mental commands"""
+        ### open graphics windows
+        win = graphics.GraphWin("My Circle", 300, 300)
+        win.setBackground("grey")
+
+        depth = 0       ### depth is from 0 to 1
+
+        # recieve commands from com stream
         for _ in range(60):
             res = self.webSocket.recv()
             if 'com' in res:
                 com = json.loads(res)['com']
                 method, score = com[0], com[1]
 
-                # display active score
+                # adjust graphics based depth
+                if method == 'neutral':
+                    depth = 0
+                elif method == 'push':
+                    depth = min(1, depth + 0.1)
+                ### set depth of image in window to var 'depth'
+
+                # display score, rest
                 print(method, score)
                 time.sleep(0.25)
         inform('testing complete')
@@ -153,5 +168,5 @@ class Emotiv:
         callback()
 
     def disconnect(self):
-        """disconnect from Emotiv Cortex web socket"""
+        """disconnect from web socket"""
         self.webSocket.close()

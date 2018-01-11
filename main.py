@@ -12,7 +12,7 @@ import json
 import os
 
 # instantiate Emotiv connection
-EMOTIV = Emotiv()
+# EMOTIV = Emotiv()
 
 # store training status
 TRAINED_PUSH = False
@@ -24,9 +24,9 @@ USAGE = '''COMMANDS: 'train neutral' 'train push' 'test' 'exit' '--help' '''
 def run():
     """run Emotiv mental command session"""
     global TRAINED_NEUTRAL, TRAINED_PUSH
-    if not EMOTIV.initialize():
-        inform('unable to initialize emotiv connection')
-        return
+    # if not EMOTIV.initialize():
+    #     inform('unable to initialize emotiv connection')
+    #     return
     inform('emotiv initialized', clear=True)
     print(USAGE)
 
