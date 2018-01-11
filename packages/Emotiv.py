@@ -11,7 +11,6 @@ from packages.Graphic import *
 import websocket
 import socket
 import ssl
-import _thread
 import json
 import time
 import os
@@ -28,29 +27,26 @@ class Emotiv:
 
     def test(self):
         """visualize mental commands"""
-        ### open graphics windows
-        win = graphics.GraphWin("My Circle", 300, 300)
-        win.setBackground("grey")
-
-        depth = 0       ### depth is from 0 to 1
-
-        # recieve commands from com stream
+        depth = 0
+        data = []       # holds depth values 0 -> 1, for every 0.25 seconds
         for _ in range(60):
             res = self.webSocket.recv()
             if 'com' in res:
                 com = json.loads(res)['com']
                 method, score = com[0], com[1]
 
-                # adjust graphics based depth
+                # adjust graphics based on depth
                 if method == 'neutral':
                     depth = 0
                 elif method == 'push':
                     depth = min(1, depth + 0.1)
-                ### set depth of image in window to var 'depth'
 
-                # display score, rest
+                # record score, rest
+                data.push(depth)
                 print(method, score)
                 time.sleep(0.25)
+
+        ### call graphics library with array 'data'
         inform('testing complete')
 
     def train(self, action):

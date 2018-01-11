@@ -47,5 +47,3 @@ def main():
             c.setFill("green")
             c.draw(win)
     win.close()
-
-main()
