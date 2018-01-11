@@ -27,8 +27,8 @@ class Emotiv:
 
     def test(self):
         """visualize mental commands"""
-        depth = 0
-        data = []       # holds depth values 0 -> 1, for every 0.25 seconds
+        radius = 50
+        data = []       # holds radius values, for every 0.25 seconds
         for _ in range(60):
             res = self.webSocket.recv()
             if 'com' in res:
@@ -37,12 +37,12 @@ class Emotiv:
 
                 # adjust graphics based on depth
                 if method == 'neutral':
-                    depth = 0
+                    radius = radius
                 elif method == 'push':
-                    depth = min(1, depth + 0.1)
+                    radius = radius - 5
 
                 # record score, rest
-                data.push(depth)
+                data.push(radius)
                 print(method, score)
                 time.sleep(0.25)
 
